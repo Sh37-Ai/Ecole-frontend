@@ -1,0 +1,121 @@
+<h2>Liste des élèves</h2>
+
+<table mat-table [dataSource]="ListeEleve" class="mat-elevation-z8">
+
+  <ng-container matColumnDef="id_eleve">
+    <th mat-header-cell *matHeaderCellDef> ID </th>
+    <td mat-cell *matCellDef="let eleve"> {{eleve.id_eleve}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="nom">
+    <th mat-header-cell *matHeaderCellDef> Nom </th>
+    <td mat-cell *matCellDef="let eleve"> {{eleve.nom}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="prenom">
+    <th mat-header-cell *matHeaderCellDef> Prénom </th>
+    <td mat-cell *matCellDef="let eleve"> {{eleve.prenom}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="telephone">
+    <th mat-header-cell *matHeaderCellDef> Téléphone </th>
+    <td mat-cell *matCellDef="let eleve"> {{eleve.telephone}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="adresse">
+    <th mat-header-cell *matHeaderCellDef> Adresse </th>
+    <td mat-cell *matCellDef="let eleve"> {{eleve.adresse}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="classe_id">
+    <th mat-header-cell *matHeaderCellDef> Classe ID </th>
+    <td mat-cell *matCellDef="let eleve"> {{eleve.classe?.id_classe}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="action">
+    <th mat-header-cell *matHeaderCellDef> Suppression </th>
+    <td mat-cell *matCellDef="let eleve">
+      <button mat-button color="warn" type="button" (click)="Suppression(eleve.id_eleve)">
+        Suppression
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+</table>
+
+<!-- Suppression par ID -->
+<label>Entrez l'identifiant</label>
+<input #idInput type="number" name="ID">
+<button type="button" (click)="Suppression(idInput.valueAsNumber)">Suppression</button>
+
+<!-- Ajout -->
+<h3>Ajouter un élève</h3>
+<div style="margin-bottom: 20px;">
+  <label>Nom</label>
+  <input #nomAddInput type="text" placeholder="Nom">
+
+  <label>Prénom</label>
+  <input #prenomAddInput type="text" placeholder="Prénom">
+
+  <label>Téléphone</label>
+  <input #telAddInput type="text" placeholder="Téléphone">
+
+  <label>Adresse</label>
+  <input #adresseAddInput type="text" placeholder="Adresse">
+
+  <label>Classe ID</label>
+  <input #classeAddInput type="text" placeholder="ID de la classe">
+
+  <button mat-button color="primary" type="button"
+          (click)="ajouter(
+            nomAddInput.value,
+            prenomAddInput.value,
+            telAddInput.value,
+            adresseAddInput.value,
+            classeAddInput.value
+          )">
+    Ajouter
+  </button>
+</div>
+
+<!-- Update -->
+<h3>Modifier un élève</h3>
+<div>
+  <label>ID</label>
+  <input #idUpdateInput type="number" placeholder="Entrez l'id de la personne">
+
+  <label>Nom</label>
+  <input #nomUpdateInput type="text" placeholder="Nom">
+
+  <label>Prénom</label>
+  <input #prenomUpdateInput type="text" placeholder="Prénom">
+
+  <label>Téléphone</label>
+  <input #telUpdateInput type="text" placeholder="Téléphone">
+
+  <label>Adresse</label>
+  <input #adresseUpdateInput type="text" placeholder="Adresse">
+
+  <label>Classe ID</label>
+  <input #classeUpdateInput type="text" placeholder="ID de la classe">
+
+  <button type="button" (click)="update(
+            idUpdateInput,
+            nomUpdateInput.value,
+            prenomUpdateInput.value,
+            telUpdateInput.value,
+            adresseUpdateInput.value,
+            classeUpdateInput.value
+          )">
+    Modifier
+  </button>
+</div>
+
+<h4> Adresse Eleves </h4>
+<div>
+  <button (click)="Navigation(1)"> Consultez leurs adreeses</button>
+
+</div>

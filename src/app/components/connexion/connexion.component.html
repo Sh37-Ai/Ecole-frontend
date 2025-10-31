@@ -1,0 +1,11 @@
+<div class="connexion">
+  <form>
+    <label>Nom:</label>
+    <input #idInput name="ID" type="text">
+
+    <label>Motedepasse:</label>
+    <input #nomInput name="nom" type="Password">
+  </form>
+
+  <button type="button" (click)="login(idInput.value, nomInput.value)">Vérifier</button>
+</div>

@@ -1,0 +1,20 @@
+<div class="eleve-details" *ngIf="eleve">
+  <form>
+    <label>Nom:</label>
+    <input [(ngModel)]="eleve.nom" name="nom" type="text">
+
+    <label>Prénom:</label>
+    <input [(ngModel)]="eleve.prenom" name="prenom" type="text">
+
+    <label>Adresse:</label>
+    <input [(ngModel)]="eleve.adresse" name="adresse" type="text">
+
+    <label>Téléphone:</label>
+    <input [(ngModel)]="eleve.telephone" name="telephone" type="text">
+
+    <br><br>
+    <button type="button" (click)="update(eleve.id_eleve)">Modifier</button>
+    <button type="button" (click)="Delete(eleve.id_eleve)">Supprimer</button>
+  </form>
+</div>
+

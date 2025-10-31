@@ -1,0 +1,13 @@
+<h1>BIENVENUE DANS NOTRE COLLEGE</h1>
+
+<form >
+  <label>Entrez votre identifiant</label>
+  <input #idInput type="number" name="ID" >
+
+  <label>Entrez votre Nom</label>
+  <input  #nomInput type="text" name="nom" >
+
+  <button type="submit" (click)="CheckExistanceEleve(idInput.valueAsNumber, nomInput.value)">Se connecter</button>
+  <p *ngIf="messageErreur" style="color:red">{{ messageErreur }}</p>
+
+</form>
