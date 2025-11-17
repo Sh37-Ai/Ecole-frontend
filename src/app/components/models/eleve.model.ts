@@ -1,5 +1,5 @@
 export interface Eleve{
-  id_eleve: number ;
+  ideleve: number ;
   nom:string;
   prenom:string;
   telephone:string;

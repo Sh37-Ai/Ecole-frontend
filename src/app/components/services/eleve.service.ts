@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 })
 export class EleveService {
 
-  private apiUrl = 'http://localhost:8080/eleves';  // Remplace par l'URL de ton API
+  private apiUrl = 'http://localhost:8080/eleves';
 
   constructor(private http: HttpClient) { }
 

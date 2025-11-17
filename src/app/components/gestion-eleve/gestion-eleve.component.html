@@ -2,9 +2,9 @@
 
 <table mat-table [dataSource]="ListeEleve" class="mat-elevation-z8">
 
-  <ng-container matColumnDef="id_eleve">
+  <ng-container matColumnDef="ideleve">
     <th mat-header-cell *matHeaderCellDef> ID </th>
-    <td mat-cell *matCellDef="let eleve"> {{eleve.id_eleve}} </td>
+    <td mat-cell *matCellDef="let eleve"> {{eleve.ideleve}} </td>
   </ng-container>
 
   <ng-container matColumnDef="nom">
@@ -32,10 +32,21 @@
     <td mat-cell *matCellDef="let eleve"> {{eleve.classe?.id_classe}} </td>
   </ng-container>
 
+
+  <ng-container matColumnDef="Notes">
+    <th mat-header-cell *matHeaderCellDef> Notes au dessous </th>
+    <td mat-cell *matCellDef="let eleve">
+      <button mat-button color="primary" type="button" (click)="getNoteByEleve(eleve.ideleve)">
+        Note
+      </button>
+    </td>
+  </ng-container>
+
+
   <ng-container matColumnDef="action">
     <th mat-header-cell *matHeaderCellDef> Suppression </th>
     <td mat-cell *matCellDef="let eleve">
-      <button mat-button color="warn" type="button" (click)="Suppression(eleve.id_eleve)">
+      <button mat-button color="warn" type="button" (click)="Suppression(eleve.ideleve)">
         Suppression
       </button>
     </td>
@@ -45,6 +56,20 @@
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
 </table>
+
+<div *ngIf="situationErreur" class="has-text-danger has-text-weight-semibold mt-3">
+  ⚠️ Il (elle) n’a pas de note.
+</div>
+
+
+<div *ngIf="situation" style="display: flex; margin-top: 40px ;justify-content: space-around; align-items: center;">
+  <div><strong>Mathématiques :</strong> {{ notee?.note_math }}</div>
+  <div><strong>Physique :</strong> {{ notee?.note_physique }}</div>
+</div>
+
+
+
+
 
 <!-- Suppression par ID -->
 <label>Entrez l'identifiant</label>
@@ -116,6 +141,7 @@
 
 <h4> Adresse Eleves </h4>
 <div>
-  <button (click)="Navigation(1)"> Consultez leurs adreeses</button>
+  <button (click)="Navigation(1)"> Créer une réservation</button>
+  <button (click)="Navigationn()"> Consultez leurs addresses</button>
 
 </div>

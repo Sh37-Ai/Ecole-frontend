@@ -21,6 +21,10 @@ export class ProfService{
     return this.http.get<Prof>(`${this.apiUrl}/${id}`);
   }
 
+  getIDProfByName(nom: string  | null) : Observable<number>{
+    return this.http.get<number>(`${this.apiUrl}/ID/${nom}`);
+  }
+
 
   setCurrentProf(prof: Prof) {
     this.currentProf = prof;

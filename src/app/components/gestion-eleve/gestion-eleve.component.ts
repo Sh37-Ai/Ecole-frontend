@@ -8,9 +8,10 @@ import { MatInputModule } from '@angular/material/input';
 import { Eleve } from '../models/eleve.model';
 import { EleveService } from '../services/eleve.service';
 import { salleService } from '../services/salle.services';
+import { NoteService } from '../services/note.service';
 import { Router } from '@angular/router';
-import {salle} from '../models/salle.model';
-
+import { salle } from '../models/salle.model';
+import { Note } from '../models/note.model';
 
 @Component({
   selector: 'app-gestion-eleve',
@@ -29,45 +30,71 @@ import {salle} from '../models/salle.model';
 export class GestionEleveComponent implements OnInit {
 
   ListeEleve: Eleve[] = [];
-  sall : salle | undefined;
+  sall: salle | undefined;
+  notee: Note | undefined;
+  situation : boolean = false ;
+  situationErreur : boolean = false ;
 
-  displayedColumns: string[] = ['id_eleve', 'nom', 'prenom', 'telephone', 'adresse', 'classe_id','action'];
+  displayedColumns: string[] = [
+    'ideleve', 'nom', 'prenom', 'telephone', 'adresse', 'classe_id','Notes','action'
+  ];
 
-  constructor(private eleveService: EleveService , private route : Router , private salleServicee: salleService ) {}
+  constructor(
+    private eleveService: EleveService,
+    private route: Router,
+    private salleServicee: salleService,
+    private noteserv: NoteService
+  ) {}
 
-  ngOnInit(){
-    this.eleveService.getAllEleves().subscribe((data: Eleve[]) => {
-      this.ListeEleve = data;
-      console.log("Liste des élèves : ", this.ListeEleve);
-    });
+  ngOnInit() {
+    this.loadEleves();
   }
 
-
+  loadEleves(): void {
+    this.eleveService.getAllEleves().subscribe({
+      next: (data: any[]) => {
+        // Normalisation pour toujours avoir ideleve
+        this.ListeEleve = data.map((e: any) => ({
+          ideleve: e.ideleve ?? e.id_eleve,
+          nom: e.nom,
+          prenom: e.prenom,
+          adresse: e.adresse,
+          telephone: e.telephone,
+          classe: e.classe
+        }));
+        console.log("Liste des élèves : ", this.ListeEleve);
+      },
+      error: (err) => console.error(err)
+    });
+  }
 
   Suppression(id: number | undefined) {
-  if (id != null) {
-    this.eleveService.deleteEleve(id).subscribe({
-      next: () => {
-        console.log("Élève supprimé");
-      },
-      error: (err) => {
-        console.log("Élève non supprimé", err);
-      }
-    });
-  } else {
-    console.log("Élève non supprimé : ID manquant");
-  }
+    if (id != null) {
+      this.eleveService.deleteEleve(id).subscribe({
+        next: () => console.log("Élève supprimé"),
+        error: (err) => console.log("Élève non supprimé", err)
+      });
+    } else {
+      console.log("Élève non supprimé : ID manquant");
+    }
   }
 
-  update(IDInput: HTMLInputElement,nom: string | undefined , prenom: string | undefined , telephone: string | undefined , adresse: string | undefined , classe_id: string | undefined ){
-    if (  !nom || !prenom || !telephone || !adresse || !classe_id) {
+  update(
+    IDInput: HTMLInputElement,
+    nom: string | undefined,
+    prenom: string | undefined,
+    telephone: string | undefined,
+    adresse: string | undefined,
+    classe_id: string | undefined
+  ) {
+    if (!nom || !prenom || !telephone || !adresse || !classe_id) {
       console.log("Tous les champs sont requis !");
       return;
     }
-    let id = Number(IDInput.value?.toString().trim());
+    const id = Number(IDInput.value?.trim());
 
-    const newEleve  = {
-      id_eleve:id ,
+    const newEleve: Eleve = {
+      ideleve: id,
       nom,
       prenom,
       telephone,
@@ -75,41 +102,41 @@ export class GestionEleveComponent implements OnInit {
       classe: { id_classe: classe_id }
     };
 
-    this.eleveService.updateEleve(id,newEleve).subscribe({
-      next : (data) => {
-        console.log("Modification fait !");
-        },
-      error : (err) =>{
-        console.log("erreur lors de modification");
-        }
-      });
-
+    this.eleveService.updateEleve(id, newEleve).subscribe({
+      next: () => console.log("Modification faite !"),
+      error: () => console.log("Erreur lors de la modification")
+    });
   }
-  Navigation(id : number | null){
-    this.route.navigate(['/maps']);
+
+  Navigation(id: number | null) {
+    if (id == null) return;
+    this.route.navigate(['/tableau']);
     this.salleServicee.getSalleById(id).subscribe({
-      next : (data: salle) =>{
+      next: (data: salle) => {
         this.sall = data;
-        console.log("Bien vue",data);
-        },
-      error : (err : any) => {
-        console.log("Problème");
-        }
+        console.log("Bien vu", data);
+      },
+      error: () => console.log("Problème lors de la récupération de la salle")
+    });
+  }
 
-      });
+  Navigationn() {
+    this.route.navigate(['/maps']);
+  }
 
-
-    }
-
-
-  ajouter( nom: string | undefined , prenom: string | undefined , telephone: string | undefined , adresse: string | undefined , classe_id: string | undefined ){
-    if ( !nom || !prenom || !telephone || !adresse || !classe_id) {
+  ajouter(
+    nom: string | undefined,
+    prenom: string | undefined,
+    telephone: string | undefined,
+    adresse: string | undefined,
+    classe_id: string | undefined
+  ) {
+    if (!nom || !prenom || !telephone || !adresse || !classe_id) {
       console.log("Tous les champs sont requis !");
       return;
     }
 
     const eleveToCreate = {
-
       nom,
       prenom,
       telephone,
@@ -119,14 +146,30 @@ export class GestionEleveComponent implements OnInit {
 
     this.eleveService.createEleve(eleveToCreate).subscribe({
       next: (data: Eleve) => {
-        this.ListeEleve.push(data);
+        this.ListeEleve.push({ ...data, ideleve: data.ideleve });
         console.log("Élève ajouté !", data);
       },
-      error: (err: any) => {
-        console.log("Erreur lors de l'ajout de l'élève", err);
-      }
+      error: (err: any) => console.log("Erreur lors de l'ajout de l'élève", err)
     });
   }
 
-}
+  getNoteByEleve(id: number | null) {
+    if (id == null) return;
 
+    this.noteserv.getNoteByEleve(id).subscribe({
+      next: (data: Note) => {
+        this.notee = data;
+        console.log("Notes récupérées :", data);
+        this.situation = true ;
+        this.situationErreur = false ;
+      },
+      error: (err: any) =>{
+        console.log("Erreur lors de la récupération des notes", err);
+        this.situationErreur = true ;
+        this.situation = false ;
+
+         }
+
+    });
+  }
+}

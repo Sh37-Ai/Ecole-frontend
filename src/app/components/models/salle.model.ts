@@ -1,5 +1,5 @@
 export interface salle{
-  id_salle : number ;
+  idSalle : number ;
   nom : string ;
 
   }

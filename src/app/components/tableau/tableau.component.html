@@ -1,1 +1,65 @@
-<p>tableau works!</p>
+<div class="agenda-container">
+  <mat-form-field appearance="fill">
+    <mat-label>Sélectionnez une date</mat-label>
+    <input
+      matInput
+      [matDatepicker]="picker"
+      [(ngModel)]="selectedDate"
+      placeholder="Choisir une date"
+    />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+
+  <div class="events" *ngIf="selectedDate">
+    <h3>Événements du {{ selectedDate | date: 'longDate' }}</h3>
+    <ul>
+      <li *ngFor="let e of filteredReservations()">
+  Salle: {{ e.idSalle }}, Début: {{ e.date_debut }}, Fin: {{ e.date_fin }}
+</li>
+
+    </ul>
+    <p *ngIf="filteredReservations().length === 0">Aucun événement pour ce jour.</p>
+  </div>
+
+
+  <div>
+  <label>Entrez date début</label>
+  <input
+    type="datetime-local"
+    [(ngModel)]="date_debute"
+    placeholder="Entrez la date de début"
+  >
+</div>
+
+<div>
+  <label>Entrez date fin</label>
+  <input
+    type="datetime-local"
+    [(ngModel)]="date_fine"
+    placeholder="Entrez la date de fin"
+  >
+</div>
+
+
+
+<div>
+  <label>Id salle</label>
+  <input type="number" [(ngModel)]="id_Sallee">
+</div>
+
+
+
+  <div class="Prenne rendez vous" >
+    <div *ngIf="!Situation" class="error-message">
+  <h3>{{ messageError }}</h3>
+</div>
+
+<button (click)="creationReservation(date_debute, date_fine, id_Sallee)">
+  Créer la réservation
+</button>
+
+  </div>
+
+</div>

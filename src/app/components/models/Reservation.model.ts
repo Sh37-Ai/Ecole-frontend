@@ -1,6 +1,7 @@
 export interface Reservation {
-  id_reservation: number;
-  horaire: string;
-  ClasseProf: { id_ClasseProf: number };
-  salle: { id_Salle: number };
+  id_reservation?: number;
+  date_debut: Date;
+  date_fin: Date;
+  id_ClasseProf: number ;
+  idSalle: number ;
 }

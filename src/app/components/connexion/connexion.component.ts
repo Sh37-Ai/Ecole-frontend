@@ -1,9 +1,16 @@
 import {Component, OnInit} from '@angular/core';
 
 
+
+
+
+
+
+
+
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';  // Correction du chemin relatif
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ProfService } from '../services/prof.service';
 import { LoginServices } from '../services/Login.services';
 import { Prof } from '../models/prof.model';
@@ -25,6 +32,7 @@ import { SecuriteService } from '../services/securite.service';
 export class ConnexionComponent {
 
   prof : Prof| undefined;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -38,11 +46,16 @@ export class ConnexionComponent {
 
 }
 login(nom: string | null , motDePasse : string | null ): void{
+
   if(nom != null && motDePasse != null ){
     this.Loggin.connection(nom,motDePasse).subscribe({
       next  : (data : any) => {
-        console.log("Token est ", data);
+        console.log("Token est ", data, "Nom est :", nom );
         this.securi.setToken(data.token);
+
+
+
+        this.securi.setNom(nom);
         this.router.navigate(['/ListeEleve']);
         },
       error : (err : any) =>{
@@ -53,6 +66,11 @@ login(nom: string | null , motDePasse : string | null ): void{
 
     }
 
+
+  }
+
+navigate() : void{
+  this.router.navigate(['/tableau']);
 
   }
 
